@@ -1,0 +1,36 @@
+name: Build Docker image
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Packer CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@main
+        with:
+          version: "latest"
+
+      - name: Packer init
+        run: packer init ./packer.pkr.hcl
+
+      - name: Packer validate
+        run: packer validate -syntax-only packer.pkr.hcl
+
+      - name: Build docker image
+        run: packer build -var image_tag=1.0.0-snapshot -except=docker-push .
+        env:
+          PACKER_LOG: 1
+          PKR_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          PKR_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PKR_VAR_ecr_url: ${{ secrets.AWS_ECR_URL }}
