@@ -1,4 +1,4 @@
-name: Build Docker image and Helm Chart
+name: Build Docker image and push to ECR
 
 on:
   push:
