@@ -9,7 +9,7 @@ VAULT_ADDR = os.getenv('VAULT_ADDR')
 SECRET_NAME = os.getenv('SECRET_NAME')
 
 if __name__ == '__main__':
-    client = hvac.Client(url=VAULT_ADDR, verify=false)
+    client = hvac.Client(url=VAULT_ADDR, verify=False)
     if client.sys.is_initialized():
         print("Vault is already initialized.")
     else:
