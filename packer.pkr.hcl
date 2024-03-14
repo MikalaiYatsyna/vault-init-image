@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    docker = {
+      source  = "github.com/hashicorp/docker"
+      version = "1.0.9"
+    }
+  }
+}
+
 source "docker" "python" {
   image       = var.python_image
   commit      = true
